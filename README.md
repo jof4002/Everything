@@ -24,3 +24,14 @@ func main() {
 	})
 }
 ```
+
+#### Windows x86 and 64bit
+
+`everything_windows_amd64.go`   works at `GOARCH=amd64`.
+
+`everything_windows_386.go`  works at `GOARCH=386`.
+
+These will be processed automatically at `go run` and `go build`.
+
+By the way,You can use `go env` to check the `GOOS` and `GOARCH`.
+
