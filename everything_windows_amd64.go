@@ -75,6 +75,7 @@ const (
 var callSetSearch *syscall.LazyProc
 var callSetMatchPath *syscall.LazyProc
 var callSetMatchCase *syscall.LazyProc
+var callSetRegex *syscall.LazyProc
 var callSetSort *syscall.LazyProc
 var callSetRequestFlags *syscall.LazyProc
 
@@ -108,6 +109,7 @@ func init() {
 		callSetSearch = mod.NewProc("Everything_SetSearchW")
 		callSetMatchPath = mod.NewProc("Everything_SetMatchPath")
 		callSetMatchCase = mod.NewProc("Everything_SetMatchCase")
+		callSetRegex = mod.NewProc("Everything_SetRegex")
 		callSetSort = mod.NewProc("Everything_SetSort")
 		callSetRequestFlags = mod.NewProc("Everything_SetRequestFlags")
 		callGetSort = mod.NewProc("Everything_GetSort")
@@ -201,6 +203,17 @@ func SetMatchCase(bEnable bool) {
 			param = 1
 		}
 		callSetMatchCase.Call(uintptr(param))
+	}
+}
+
+// SetRegex void Everything_SetRegex(BOOL bEnable);
+func SetRegex(bEnable bool) {
+	if callSetRegex != nil {
+		var param int
+		if bEnable {
+			param = 1
+		}
+		callSetRegex.Call(uintptr(param))
 	}
 }
 
