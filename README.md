@@ -1,6 +1,11 @@
 # Everything
 Everything SDK caller for golang
 
+Fork of github.com/jof4002/Everything
+
+Style inspired by C example in SDK documentation
+https://www.voidtools.com/support/everything/sdk/c/
+
 You need Everything64.dll from Everything SDK ( http://voidtools.com/downloads/ )
 
 ```go

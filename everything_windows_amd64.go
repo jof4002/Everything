@@ -1,7 +1,6 @@
-// Package Everything calls Search Everything's dll
-// I'm newbie in go and I'm just calling dll
 // Search Everything : http://voidtools.com/
-package Everything
+// https://www.voidtools.com/support/everything/sdk/
+package everything
 
 import (
 	"fmt"
@@ -71,57 +70,123 @@ const (
 	EVERYTHING_REQUEST_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000
 )
 
-// write search state
-var callSetSearch *syscall.LazyProc
-var callSetMatchPath *syscall.LazyProc
-var callSetMatchCase *syscall.LazyProc
-var callSetRegex *syscall.LazyProc
-var callSetSort *syscall.LazyProc
-var callSetRequestFlags *syscall.LazyProc
+// manipulate search state
+var Everything_SetSearch *syscall.LazyProc
+var Everything_SetMatchPath *syscall.LazyProc
+var Everything_SetMatchCase *syscall.LazyProc
+var Everything_SetMatchWholeWord *syscall.LazyProc
+var Everything_SetRegex *syscall.LazyProc
+var Everything_SetMax *syscall.LazyProc
+var Everything_SetOffset *syscall.LazyProc
+var Everything_SetReplyWindow *syscall.LazyProc
+var Everything_SetReplyID *syscall.LazyProc
+var Everything_SetSort *syscall.LazyProc
+var Everything_SetRequestFlags *syscall.LazyProc
 
 // read search state
-var callGetSort *syscall.LazyProc
+var Everything_GetSearch *syscall.LazyProc
+var Everything_GetMatchPath *syscall.LazyProc
+var Everything_GetMatchCase *syscall.LazyProc
+var Everything_GetMatchWholeWord *syscall.LazyProc
+var Everything_GetRegex *syscall.LazyProc
+var Everything_GetMax *syscall.LazyProc
+var Everything_GetOffset *syscall.LazyProc
+var Everything_GetReplyWindow *syscall.LazyProc
+var Everything_GetReplyID *syscall.LazyProc
+var Everything_GetLastError *syscall.LazyProc
+var Everything_GetSort *syscall.LazyProc
+var Everything_GetRequestFlags *syscall.LazyProc
 
 // execute query
-var callQuery *syscall.LazyProc
+var Everything_Query *syscall.LazyProc
 
 // query reply
+var Everything_IsQueryReply *syscall.LazyProc
 
 // write result state
 
 // read result state
-var callGetNumResults *syscall.LazyProc
+var Everything_GetNumFileResults *syscall.LazyProc
+var Everything_GetNumFolderResults *syscall.LazyProc
+var Everything_GetNumResults *syscall.LazyProc
+var Everything_GetTotFileResults *syscall.LazyProc
+var Everything_GetTotFolderResults *syscall.LazyProc
+var Everything_GetTotResults *syscall.LazyProc
 
-var callGetResultFullPathName *syscall.LazyProc
-var callIsFolderResult *syscall.LazyProc
-var callIsFileResult *syscall.LazyProc
-
-var callGetResultListSort *syscall.LazyProc
-var callGetResultSize *syscall.LazyProc
-var callGetResultDateModified *syscall.LazyProc
+var Everything_IsFolderResult *syscall.LazyProc
+var Everything_IsFileResult *syscall.LazyProc
+var Everything_GetResultFileName *syscall.LazyProc
+var Everything_GetResultPath *syscall.LazyProc
+var Everything_GetResultFullPathName *syscall.LazyProc
+var Everything_GetResultListSort *syscall.LazyProc
+var Everything_GetResultListRequestedFlags *syscall.LazyProc
+var Everything_GetResultExstension *syscall.LazyProc
+var Everything_GetResultSize *syscall.LazyProc
+var Everything_GetResultDateModified *syscall.LazyProc
+var Everything_GetResultDateAccessed *syscall.LazyProc
+var Everything_GetResultAttributes *syscall.LazyProc
 
 // reset state and free any allocated memory
-var callReset *syscall.LazyProc
+var Everything_Reset *syscall.LazyProc
+var Everything_CleanUp *syscall.LazyProc
+var Everything_IsDBLoaded *syscall.LazyProc
 
 func init() {
 	mod := syscall.NewLazyDLL("Everything64.dll")
 	if mod != nil {
-		callSetSearch = mod.NewProc("Everything_SetSearchW")
-		callSetMatchPath = mod.NewProc("Everything_SetMatchPath")
-		callSetMatchCase = mod.NewProc("Everything_SetMatchCase")
-		callSetRegex = mod.NewProc("Everything_SetRegex")
-		callSetSort = mod.NewProc("Everything_SetSort")
-		callSetRequestFlags = mod.NewProc("Everything_SetRequestFlags")
-		callGetSort = mod.NewProc("Everything_GetSort")
-		callQuery = mod.NewProc("Everything_QueryW")
-		callGetNumResults = mod.NewProc("Everything_GetNumResults")
-		callGetResultFullPathName = mod.NewProc("Everything_GetResultFullPathNameW")
-		callIsFolderResult = mod.NewProc("Everything_IsFolderResult")
-		callIsFileResult = mod.NewProc("Everything_IsFileResult")
-		callGetResultListSort = mod.NewProc("Everything_GetResultListSort")
-		callGetResultSize = mod.NewProc("Everything_GetResultSize")
-		callGetResultDateModified = mod.NewProc("Everything_GetResultDateModified")
-		callReset = mod.NewProc("Everything_Reset")
+		// Search State
+		Everything_SetSearch = mod.NewProc("Everything_SetSearchW")
+		Everything_SetMatchPath = mod.NewProc("Everything_SetMatchPath")
+		Everything_SetMatchCase = mod.NewProc("Everything_SetMatchCase")
+		Everything_SetMatchWholeWord = mod.NewProc("Everything_SetMatchWholeWord")
+		Everything_SetRegex = mod.NewProc("Everything_SetRegex")
+		Everything_SetMax = mod.NewProc("Everything_SetMax")
+		Everything_SetOffset = mod.NewProc("Everything_SetOffset")
+		Everything_SetReplyWindow = mod.NewProc("Everything_SetReplyWindow")
+		Everything_SetReplyID = mod.NewProc("Everything_SetReplyID")
+		Everything_SetSort = mod.NewProc("Everything_SetSort")
+		Everything_SetRequestFlags = mod.NewProc("Everything_SetRequestFlags")
+		// Read Search State
+		Everything_GetSearch = mod.NewProc("Everything_GetSearchW")
+		Everything_GetMatchPath = mod.NewProc("Everything_GetMatchPath")
+		Everything_GetMatchCase = mod.NewProc("Everything_GetMatchCase")
+		Everything_GetMatchWholeWord = mod.NewProc("Everything_GetMatchWholeWord")
+		Everything_GetRegex = mod.NewProc("Everything_GetRegex")
+		Everything_GetMax = mod.NewProc("Everything_GetMax")
+		Everything_GetOffset = mod.NewProc("Everything_GetOffset")
+		Everything_GetReplyWindow = mod.NewProc("Everything_GetReplyWindow")
+		Everything_GetReplyID = mod.NewProc("Everything_GetReplyID")
+		Everything_GetLastError = mod.NewProc("Everything_GetLastError")
+		Everything_GetRequestFlags = mod.NewProc("Everything_GetRequestFlags")
+		// Query
+		Everything_Query = mod.NewProc("Everything_QueryW")
+		// Query Reply
+		Everything_IsQueryReply = mod.NewProc("Everything_QueryW")
+		// Reading results
+		Everything_GetNumFileResults = mod.NewProc("Everything_GetNumFileResults")
+		Everything_GetNumFolderResults = mod.NewProc("Everything_GetNumFolderResults")
+		Everything_GetNumResults = mod.NewProc("Everything_GetNumResults")
+		Everything_GetTotFileResults = mod.NewProc("Everything_GetTotFileResults")
+		Everything_GetTotFolderResults = mod.NewProc("Everything_GetTotFolderResults")
+		Everything_GetTotResults = mod.NewProc("Everything_GetTotResults")
+
+		Everything_IsFolderResult = mod.NewProc("Everything_IsFolderResult")
+		Everything_IsFileResult = mod.NewProc("Everything_IsFileResult")
+		Everything_GetResultFileName = mod.NewProc("Everything_GetResultFileName")
+		Everything_GetResultPath = mod.NewProc("Everything_GetResultPath")
+		Everything_GetResultFullPathName = mod.NewProc("Everything_GetResultFullPathNameW")
+		Everything_GetResultListSort = mod.NewProc("Everything_GetResultListSort")
+		Everything_GetResultListRequestedFlags = mod.NewProc("Everything_GetResultListRequestedFlags")
+		Everything_GetResultExstension = mod.NewProc("Everything_GetResultExstension")
+		Everything_GetResultSize = mod.NewProc("Everything_GetResultSize")
+		Everything_GetResultDateModified = mod.NewProc("Everything_GetResultDateModified")
+		Everything_GetResultDateAccessed = mod.NewProc("Everything_GetResultDateAccessed")
+		Everything_GetResultAttributes = mod.NewProc("Everything_GetResultDateAttributes")
+
+		// Reset
+		Everything_Reset = mod.NewProc("Everything_Reset")
+		Everything_CleanUp = mod.NewProc("Everything_CleanUP")
+		Everything_IsDBLoaded = mod.NewProc("Everything_IsDBLoaded")
 	}
 }
 
@@ -179,62 +244,62 @@ func GetVersionString() (ver string) {
 
 // SetSearch void Everything_SetSearchW(LPCWSTR lpString);
 func SetSearch(str string) {
-	if callSetSearch != nil {
-		callSetSearch.Call(uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str))))
+	if Everything_SetSearch != nil {
+		Everything_SetSearch.Call(uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str))))
 	}
 }
 
 // SetMatchPath void Everything_SetMatchPath(BOOL bEnable);
 func SetMatchPath(bEnable bool) {
-	if callSetMatchPath != nil {
+	if Everything_SetMatchPath != nil {
 		var param int
 		if bEnable {
 			param = 1
 		}
-		callSetMatchPath.Call(uintptr(param))
+		Everything_SetMatchPath.Call(uintptr(param))
 	}
 }
 
 // SetMatchCase void Everything_SetMatchCase(BOOL bEnable);
 func SetMatchCase(bEnable bool) {
-	if callSetMatchCase != nil {
+	if Everything_SetMatchCase != nil {
 		var param int
 		if bEnable {
 			param = 1
 		}
-		callSetMatchCase.Call(uintptr(param))
+		Everything_SetMatchCase.Call(uintptr(param))
 	}
 }
 
 // SetRegex void Everything_SetRegex(BOOL bEnable);
 func SetRegex(bEnable bool) {
-	if callSetRegex != nil {
+	if Everything_SetRegex != nil {
 		var param int
 		if bEnable {
 			param = 1
 		}
-		callSetRegex.Call(uintptr(param))
+		Everything_SetRegex.Call(uintptr(param))
 	}
 }
 
 // SetSort void Everything_SetSort(DWORD dwSort); // Everything 1.4.1
 func SetSort(sortMode int) {
-	if callSetSort != nil {
-		callSetSort.Call(uintptr(sortMode))
+	if Everything_SetSort != nil {
+		Everything_SetSort.Call(uintptr(sortMode))
 	}
 }
 
 // SetRequestFlags void Everything_SetRequestFlags(DWORD dwRequestFlags); // Everything 1.4.1
 func SetRequestFlags(flags int) {
-	if callSetRequestFlags != nil {
-		callSetRequestFlags.Call(uintptr(flags))
+	if Everything_SetRequestFlags != nil {
+		Everything_SetRequestFlags.Call(uintptr(flags))
 	}
 }
 
 // GetSort DWORD Everything_GetSort(void); // Everything 1.4.1
 func GetSort() (ret int) {
-	if callGetSort != nil {
-		r, _, _ := callGetSort.Call()
+	if Everything_GetSort != nil {
+		r, _, _ := Everything_GetSort.Call()
 		ret = int(r)
 	}
 	return
@@ -242,12 +307,12 @@ func GetSort() (ret int) {
 
 // Query BOOL Everything_QueryW(BOOL bWait);
 func Query(bWait bool) (ret bool) {
-	if callQuery != nil {
+	if Everything_Query != nil {
 		var param int
 		if bWait {
 			param = 1
 		}
-		r, _, _ := callQuery.Call(uintptr(param))
+		r, _, _ := Everything_Query.Call(uintptr(param))
 		ret = r != 0
 	}
 	return
@@ -255,8 +320,8 @@ func Query(bWait bool) (ret bool) {
 
 // GetNumResults DWORD Everything_GetNumResults(void);
 func GetNumResults() (ret int) {
-	if callGetNumResults != nil {
-		r, _, _ := callGetNumResults.Call()
+	if Everything_GetNumResults != nil {
+		r, _, _ := Everything_GetNumResults.Call()
 		ret = int(r)
 	}
 	return
@@ -264,10 +329,9 @@ func GetNumResults() (ret int) {
 
 // GetResultFullPathName DWORD Everything_GetResultFullPathNameW(DWORD dwIndex,LPWSTR wbuf,DWORD wbuf_size_in_wchars);
 func GetResultFullPathName(index int) (path string) {
-	if callGetResultFullPathName != nil {
-		var pathbuf []uint16
-		pathbuf = make([]uint16, 1024)
-		callGetResultFullPathName.Call(uintptr(index), uintptr(unsafe.Pointer(&pathbuf[0])), 1023) // bufsize-1
+	if Everything_GetResultFullPathName != nil {
+		var pathbuf = make([]uint16, 1024)
+		Everything_GetResultFullPathName.Call(uintptr(index), uintptr(unsafe.Pointer(&pathbuf[0])), 1023) // bufsize-1
 		path = syscall.UTF16ToString(pathbuf)
 	}
 	return
@@ -275,8 +339,8 @@ func GetResultFullPathName(index int) (path string) {
 
 // IsFolderResult BOOL Everything_IsFolderResult(DWORD dwIndex);
 func IsFolderResult(index int) (ret bool) {
-	if callIsFolderResult != nil {
-		r, _, _ := callIsFolderResult.Call(uintptr(index))
+	if Everything_IsFolderResult != nil {
+		r, _, _ := Everything_IsFolderResult.Call(uintptr(index))
 		ret = r != 0
 	}
 	return
@@ -284,17 +348,57 @@ func IsFolderResult(index int) (ret bool) {
 
 // IsFileResult BOOL Everything_IsFileResult(DWORD dwIndex);
 func IsFileResult(index int) (ret bool) {
-	if callIsFileResult != nil {
-		r, _, _ := callIsFileResult.Call(uintptr(index))
+	if Everything_IsFileResult != nil {
+		r, _, _ := Everything_IsFileResult.Call(uintptr(index))
 		ret = r != 0
+	}
+	return
+}
+
+func GetSearch() (query string) {
+	if Everything_GetSearch != nil {
+		r, _, _ := Everything_GetSearch.Call()
+		query = *(*string)(unsafe.Pointer(&r))
+	}
+	return
+}
+
+func GetMatchPath() (enabled int32) {
+	if Everything_GetMatchPath != nil {
+		r, _, _ := Everything_GetMatchPath.Call()
+		enabled = int32(r)
+	}
+	return
+}
+
+func GetMatchCase() (enabled int32) {
+	if Everything_GetMatchCase != nil {
+		r, _, _ := Everything_GetMatchCase.Call()
+		enabled = int32(r)
+	}
+	return
+}
+
+func GetMatchWholeWord() (enabled bool) {
+	if Everything_GetMatchWholeWord != nil {
+		r, _, _ := Everything_GetMatchWholeWord.Call()
+		enabled = r != 0
+	}
+	return
+}
+
+func GetRegex() (enabled bool) {
+	if Everything_GetRegex != nil {
+		r, _, _ := Everything_GetRegex.Call()
+		enabled = r != 0
 	}
 	return
 }
 
 // GetResultListSort DWORD Everything_GetResultListSort(void); // Everything 1.4.1
 func GetResultListSort() (mode int) {
-	if callGetResultListSort != nil {
-		r, _, _ := callGetResultListSort.Call()
+	if Everything_GetResultListSort != nil {
+		r, _, _ := Everything_GetResultListSort.Call()
 		mode = int(r)
 	}
 	return
@@ -302,17 +406,17 @@ func GetResultListSort() (mode int) {
 
 // GetResultSize BOOL Everything_GetResultSize(DWORD dwIndex,LARGE_INTEGER *lpSize); // Everything 1.4.1
 func GetResultSize(index int) (size int64) {
-	if callGetResultSize != nil {
-		callGetResultSize.Call(uintptr(index), uintptr(unsafe.Pointer(&size)))
+	if Everything_GetResultSize != nil {
+		Everything_GetResultSize.Call(uintptr(index), uintptr(unsafe.Pointer(&size)))
 	}
 	return
 }
 
 // GetResultDateModified BOOL Everything_GetResultDateModified(DWORD dwIndex,FILETIME *lpDateModified); // Everything 1.4.1
 func GetResultDateModified(index int) (t time.Time) {
-	if callGetResultDateModified != nil {
+	if Everything_GetResultDateModified != nil {
 		var ft syscall.Filetime
-		callGetResultDateModified.Call(uintptr(index), uintptr(unsafe.Pointer(&ft)))
+		Everything_GetResultDateModified.Call(uintptr(index), uintptr(unsafe.Pointer(&ft)))
 		t = time.Unix(0, ft.Nanoseconds())
 	}
 	return
@@ -320,7 +424,7 @@ func GetResultDateModified(index int) (t time.Time) {
 
 // Reset void Everything_Reset(void);
 func Reset() {
-	if callReset != nil {
-		callReset.Call()
+	if Everything_Reset != nil {
+		Everything_Reset.Call()
 	}
 }
