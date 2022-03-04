@@ -1,6 +1,6 @@
 // Search Everything : http://voidtools.com/
 // https://www.voidtools.com/support/everything/sdk/
-package Everything
+package everything
 
 import (
 	"fmt"
@@ -70,57 +70,123 @@ const (
 	EVERYTHING_REQUEST_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000
 )
 
-// write search state
+// manipulate search state
 var Everything_SetSearch *syscall.LazyProc
 var Everything_SetMatchPath *syscall.LazyProc
-var Everything_SetRegex *syscall.LazyProc
 var Everything_SetMatchCase *syscall.LazyProc
+var Everything_SetMatchWholeWord *syscall.LazyProc
+var Everything_SetRegex *syscall.LazyProc
+var Everything_SetMax *syscall.LazyProc
+var Everything_SetOffset *syscall.LazyProc
+var Everything_SetReplyWindow *syscall.LazyProc
+var Everything_SetReplyID *syscall.LazyProc
 var Everything_SetSort *syscall.LazyProc
 var Everything_SetRequestFlags *syscall.LazyProc
 
 // read search state
+var Everything_GetSearch *syscall.LazyProc
+var Everything_GetMatchPath *syscall.LazyProc
+var Everything_GetMatchCase *syscall.LazyProc
+var Everything_GetMatchWholeWord *syscall.LazyProc
+var Everything_GetRegex *syscall.LazyProc
+var Everything_GetMax *syscall.LazyProc
+var Everything_GetOffset *syscall.LazyProc
+var Everything_GetReplyWindow *syscall.LazyProc
+var Everything_GetReplyID *syscall.LazyProc
+var Everything_GetLastError *syscall.LazyProc
 var Everything_GetSort *syscall.LazyProc
+var Everything_GetRequestFlags *syscall.LazyProc
 
 // execute query
 var Everything_Query *syscall.LazyProc
 
 // query reply
+var Everything_IsQueryReply *syscall.LazyProc
 
 // write result state
 
 // read result state
+var Everything_GetNumFileResults *syscall.LazyProc
+var Everything_GetNumFolderResults *syscall.LazyProc
 var Everything_GetNumResults *syscall.LazyProc
+var Everything_GetTotFileResults *syscall.LazyProc
+var Everything_GetTotFolderResults *syscall.LazyProc
+var Everything_GetTotResults *syscall.LazyProc
 
-var Everything_GetResultFullPathName *syscall.LazyProc
 var Everything_IsFolderResult *syscall.LazyProc
 var Everything_IsFileResult *syscall.LazyProc
-
+var Everything_GetResultFileName *syscall.LazyProc
+var Everything_GetResultPath *syscall.LazyProc
+var Everything_GetResultFullPathName *syscall.LazyProc
 var Everything_GetResultListSort *syscall.LazyProc
+var Everything_GetResultListRequestedFlags *syscall.LazyProc
+var Everything_GetResultExstension *syscall.LazyProc
 var Everything_GetResultSize *syscall.LazyProc
 var Everything_GetResultDateModified *syscall.LazyProc
+var Everything_GetResultDateAccessed *syscall.LazyProc
+var Everything_GetResultAttributes *syscall.LazyProc
 
 // reset state and free any allocated memory
 var Everything_Reset *syscall.LazyProc
+var Everything_CleanUp *syscall.LazyProc
+var Everything_IsDBLoaded *syscall.LazyProc
 
 func init() {
 	mod := syscall.NewLazyDLL("Everything64.dll")
 	if mod != nil {
+		// Search State
 		Everything_SetSearch = mod.NewProc("Everything_SetSearchW")
 		Everything_SetMatchPath = mod.NewProc("Everything_SetMatchPath")
 		Everything_SetMatchCase = mod.NewProc("Everything_SetMatchCase")
+		Everything_SetMatchWholeWord = mod.NewProc("Everything_SetMatchWholeWord")
 		Everything_SetRegex = mod.NewProc("Everything_SetRegex")
+		Everything_SetMax = mod.NewProc("Everything_SetMax")
+		Everything_SetOffset = mod.NewProc("Everything_SetOffset")
+		Everything_SetReplyWindow = mod.NewProc("Everything_SetReplyWindow")
+		Everything_SetReplyID = mod.NewProc("Everything_SetReplyID")
 		Everything_SetSort = mod.NewProc("Everything_SetSort")
 		Everything_SetRequestFlags = mod.NewProc("Everything_SetRequestFlags")
-		Everything_GetSort = mod.NewProc("Everything_GetSort")
+		// Read Search State
+		Everything_GetSearch = mod.NewProc("Everything_GetSearchW")
+		Everything_GetMatchPath = mod.NewProc("Everything_GetMatchPath")
+		Everything_GetMatchCase = mod.NewProc("Everything_GetMatchCase")
+		Everything_GetMatchWholeWord = mod.NewProc("Everything_GetMatchWholeWord")
+		Everything_GetRegex = mod.NewProc("Everything_GetRegex")
+		Everything_GetMax = mod.NewProc("Everything_GetMax")
+		Everything_GetOffset = mod.NewProc("Everything_GetOffset")
+		Everything_GetReplyWindow = mod.NewProc("Everything_GetReplyWindow")
+		Everything_GetReplyID = mod.NewProc("Everything_GetReplyID")
+		Everything_GetLastError = mod.NewProc("Everything_GetLastError")
+		Everything_GetRequestFlags = mod.NewProc("Everything_GetRequestFlags")
+		// Query
 		Everything_Query = mod.NewProc("Everything_QueryW")
+		// Query Reply
+		Everything_IsQueryReply = mod.NewProc("Everything_QueryW")
+		// Reading results
+		Everything_GetNumFileResults = mod.NewProc("Everything_GetNumFileResults")
+		Everything_GetNumFolderResults = mod.NewProc("Everything_GetNumFolderResults")
 		Everything_GetNumResults = mod.NewProc("Everything_GetNumResults")
-		Everything_GetResultFullPathName = mod.NewProc("Everything_GetResultFullPathNameW")
+		Everything_GetTotFileResults = mod.NewProc("Everything_GetTotFileResults")
+		Everything_GetTotFolderResults = mod.NewProc("Everything_GetTotFolderResults")
+		Everything_GetTotResults = mod.NewProc("Everything_GetTotResults")
+
 		Everything_IsFolderResult = mod.NewProc("Everything_IsFolderResult")
 		Everything_IsFileResult = mod.NewProc("Everything_IsFileResult")
+		Everything_GetResultFileName = mod.NewProc("Everything_GetResultFileName")
+		Everything_GetResultPath = mod.NewProc("Everything_GetResultPath")
+		Everything_GetResultFullPathName = mod.NewProc("Everything_GetResultFullPathNameW")
 		Everything_GetResultListSort = mod.NewProc("Everything_GetResultListSort")
+		Everything_GetResultListRequestedFlags = mod.NewProc("Everything_GetResultListRequestedFlags")
+		Everything_GetResultExstension = mod.NewProc("Everything_GetResultExstension")
 		Everything_GetResultSize = mod.NewProc("Everything_GetResultSize")
 		Everything_GetResultDateModified = mod.NewProc("Everything_GetResultDateModified")
+		Everything_GetResultDateAccessed = mod.NewProc("Everything_GetResultDateAccessed")
+		Everything_GetResultAttributes = mod.NewProc("Everything_GetResultDateAttributes")
+
+		// Reset
 		Everything_Reset = mod.NewProc("Everything_Reset")
+		Everything_CleanUp = mod.NewProc("Everything_CleanUP")
+		Everything_IsDBLoaded = mod.NewProc("Everything_IsDBLoaded")
 	}
 }
 
@@ -264,8 +330,7 @@ func GetNumResults() (ret int) {
 // GetResultFullPathName DWORD Everything_GetResultFullPathNameW(DWORD dwIndex,LPWSTR wbuf,DWORD wbuf_size_in_wchars);
 func GetResultFullPathName(index int) (path string) {
 	if Everything_GetResultFullPathName != nil {
-		var pathbuf []uint16
-		pathbuf = make([]uint16, 1024)
+		var pathbuf = make([]uint16, 1024)
 		Everything_GetResultFullPathName.Call(uintptr(index), uintptr(unsafe.Pointer(&pathbuf[0])), 1023) // bufsize-1
 		path = syscall.UTF16ToString(pathbuf)
 	}
@@ -286,6 +351,46 @@ func IsFileResult(index int) (ret bool) {
 	if Everything_IsFileResult != nil {
 		r, _, _ := Everything_IsFileResult.Call(uintptr(index))
 		ret = r != 0
+	}
+	return
+}
+
+func GetSearch() (query string) {
+	if Everything_GetSearch != nil {
+		r, _, _ := Everything_GetSearch.Call()
+		query = *(*string)(unsafe.Pointer(&r))
+	}
+	return
+}
+
+func GetMatchPath() (enabled int32) {
+	if Everything_GetMatchPath != nil {
+		r, _, _ := Everything_GetMatchPath.Call()
+		enabled = int32(r)
+	}
+	return
+}
+
+func GetMatchCase() (enabled int32) {
+	if Everything_GetMatchCase != nil {
+		r, _, _ := Everything_GetMatchCase.Call()
+		enabled = int32(r)
+	}
+	return
+}
+
+func GetMatchWholeWord() (enabled bool) {
+	if Everything_GetMatchWholeWord != nil {
+		r, _, _ := Everything_GetMatchWholeWord.Call()
+		enabled = r != 0
+	}
+	return
+}
+
+func GetRegex() (enabled bool) {
+	if Everything_GetRegex != nil {
+		r, _, _ := Everything_GetRegex.Call()
+		enabled = r != 0
 	}
 	return
 }
